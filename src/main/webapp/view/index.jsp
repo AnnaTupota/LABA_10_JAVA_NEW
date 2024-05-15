@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="../style/style.css">
     <style>
         .pricing-header {
             max-width: 700px;
@@ -107,9 +107,9 @@
 
 
             <ul id="flowersList"></ul>
-            <img width="300px" src="img/111.svg" alt="Цветок 5">
-            <img width="500px" src="img/1.svg" alt="Цветок 1">
-            <img width="300px"src="img/2.svg" alt="Цветок 4">
+            <img width="300px" src="../img/111.svg" alt="Цветок 5">
+            <img width="500px" src="../img/1.svg" alt="Цветок 1">
+            <img width="300px" src="../img/2.svg" alt="Цветок 4">
             <div class="copyright">
                 <p>© Copyright Tupota 2024</p>
             </div>

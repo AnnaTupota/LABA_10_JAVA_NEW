@@ -14,7 +14,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="../style/style.css">
     <style>
         .pricing-header {
             max-width: 700px;
@@ -32,33 +32,26 @@
 <body>
 <script type="module">
     let request = new XMLHttpRequest();
-    request.open("GET", "songs.json");
-
+    request.open("GET", "flowers.json");
     request.responseType = "json";
     request.send();
-
     request.onload = function() {
         let response = request.response;
         fillTable(response);
     }
-    function fillTable(response) {
-        let tbody = document.querySelector("tbody");
-        //let songsArray = response["songs"];
-        response.forEach(object => {
-            let newflower = document.createElement("tr");
-            let flower_name = object["flower_name"];
-            let sort = object["sort"];
-            let color = object["color"];
-            let live = object["live"];
-            let red_book = object["red_book"];
-            newflower.innerHTML =
-                '<th scope="row" class="text-start">' + flower_name +
-                '</th><td class="text-body-secondary">' + sort +
-                '</td><td class="text-body-secondary">' + color +
-                '</td><td class="text-body-secondary">' + live +
-                '</td><td class="text-body-secondary">' + red_book + '</td>';
 
-            tbody.appendChild(newflower);
+    function fillTable(flowers) {
+        let tbody = document.querySelector("tbody");
+        flowers.forEach(flower => {
+            let tr = document.createElement("tr");
+            tr.innerHTML = `
+<th scope="row" class="text-start">${flower.flower_name}</th>
+<td class="text-body-secondary">${flower.sort}</td>
+<td class="text-body-secondary">${flower.color}</td>
+<td class="text-body-secondary">${flower.live}</td>
+<td class="text-body-secondary">${flower.red_book}</td>
+`;
+            tbody.appendChild(tr);
         });
     }
 </script>
