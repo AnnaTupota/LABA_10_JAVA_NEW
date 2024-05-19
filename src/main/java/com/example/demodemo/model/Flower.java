@@ -1,19 +1,19 @@
 package com.example.demodemo.model;
 
 public class Flower {
-    private String id;
+    private int id; // ID теперь типа int
     private String flowerName;
     private String sort;
     private String color;
-    private String live;
-    private String redBook;
+    private boolean live; // Live теперь типа boolean
+    private boolean redBook; // RedBook теперь типа boolean
 
     // Конструктор без параметров
     public Flower() {
     }
 
     // Конструктор со всеми параметрами
-    public Flower(String id, String flowerName, String sort, String color, String live, String redBook) {
+    public Flower(int id, String flowerName, String sort, String color, boolean live, boolean redBook) {
         this.id = id;
         this.flowerName = flowerName;
         this.sort = sort;
@@ -23,11 +23,11 @@ public class Flower {
     }
 
     // Геттеры и сеттеры
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -55,19 +55,19 @@ public class Flower {
         this.color = color;
     }
 
-    public String getLive() {
+    public boolean isLive() {
         return live;
     }
 
-    public void setLive(String live) {
+    public void setLive(boolean live) {
         this.live = live;
     }
 
-    public String getRedBook() {
+    public boolean isRedBook() {
         return redBook;
     }
 
-    public void setRedBook(String redBook) {
+    public void setRedBook(boolean redBook) {
         this.redBook = redBook;
     }
 
@@ -75,12 +75,12 @@ public class Flower {
     @Override
     public String toString() {
         return "Flower{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", flowerName='" + flowerName + '\'' +
                 ", sort='" + sort + '\'' +
                 ", color='" + color + '\'' +
-                ", live='" + live + '\'' +
-                ", redBook='" + redBook + '\'' +
+                ", live=" + live +
+                ", redBook=" + redBook +
                 '}';
     }
 }

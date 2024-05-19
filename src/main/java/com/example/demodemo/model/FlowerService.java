@@ -1,47 +1,78 @@
 package com.example.demodemo.model;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import java.io.*;
-import java.lang.reflect.Type;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.Character.getType;
-
 public class FlowerService {
-    private static final String FILE_PATH = "src\\main\\webapp\\flowers.json";
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/flowers";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "A@annatupota2004";
 
     public static void saveFlower(Flower flower) {
-        List<Flower> flowers = getAllFlowers();
-        flowers.add(flower);
-        writeToJsonFile(flowers);
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            String sql = "INSERT INTO flowers (flower_name, color, sort, live, red_book) VALUES (?, ?, ?, ?, ?)";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, flower.getFlowerName());
+                statement.setString(2, flower.getColor());
+                statement.setString(3, flower.getSort());
+                statement.setBoolean(4, flower.isLive());
+                statement.setBoolean(5, flower.isRedBook());
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public static List<Flower> getAllFlowers() {
-        String json = readFromJsonFile();
-        Type listType = new TypeToken<ArrayList<Flower>>(){}.getType();
-        return new Gson().fromJson(json, listType);
-    }
-
-    private static String readFromJsonFile() {
-        StringBuilder jsonString = new StringBuilder();
-        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_PATH))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                jsonString.append(line);
+        List<Flower> flowers = new ArrayList<>();
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            String sql = "SELECT * FROM flowers";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                ResultSet resultSet = statement.executeQuery();
+                while (resultSet.next()) {
+                    Flower flower = new Flower();
+                    flower.setId(resultSet.getInt("id"));
+                    flower.setFlowerName(resultSet.getString("flower_name"));
+                    flower.setColor(resultSet.getString("color"));
+                    flower.setSort(resultSet.getString("sort"));
+                    flower.setLive(resultSet.getBoolean("live"));
+                    flower.setRedBook(resultSet.getBoolean("red_book"));
+                    flowers.add(flower);
+                }
             }
-        } catch (IOException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
-        return jsonString.toString();
+        return flowers;
     }
 
-    private static void writeToJsonFile(List<Flower> flowers) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_PATH))) {
-            String json = new Gson().toJson(flowers);
-            writer.write(json);
-        } catch (IOException e) {
+    public static void updateFlower(Flower flower) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            String sql = "UPDATE flowers SET flower_name = ?, color = ?, sort = ?, live = ?, red_book = ? WHERE id = ?";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setString(1, flower.getFlowerName());
+                statement.setString(2, flower.getColor());
+                statement.setString(3, flower.getSort());
+                statement.setBoolean(4, flower.isLive());
+                statement.setBoolean(5, flower.isRedBook());
+                statement.setInt(6, flower.getId());
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void deleteFlower(int id) {
+        try (Connection connection = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD)) {
+            String sql = "DELETE FROM flowers WHERE id = ?";
+            try (PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, id);
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

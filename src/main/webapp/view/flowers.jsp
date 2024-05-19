@@ -31,29 +31,54 @@
 </head>
 <body>
 <script type="module">
-    let request = new XMLHttpRequest();
-    request.open("GET", "flowers.json");
-    request.responseType = "json";
-    request.send();
-    request.onload = function() {
-        let response = request.response;
-        fillTable(response);
+    // Функция для получения данных из JSON и отправки их на сервер
+    function getAndSendFlowers() {
+        let request = new XMLHttpRequest();
+        request.open("GET", "flowers.json", true);
+
+        request.onload = function() {
+            if (request.status === 200) {
+// Получаем данные из JSON
+                let flowers = JSON.parse(request.responseText);
+// Отправляем данные на сервер для записи в базу данных
+                flowers.forEach(flower => {
+                    sendDataToServer(flower);
+                });
+            } else {
+                console.error("Ошибка при получении данных из JSON: " + request.statusText);
+            }
+        };
+
+        request.onerror = function() {
+            console.error("Ошибка при выполнении запроса.");
+        };
+
+        request.send();
     }
 
-    function fillTable(flowers) {
-        let tbody = document.querySelector("tbody");
-        flowers.forEach(flower => {
-            let tr = document.createElement("tr");
-            tr.innerHTML = `
-<th scope="row" class="text-start">${flower.flower_name}</th>
-<td class="text-body-secondary">${flower.sort}</td>
-<td class="text-body-secondary">${flower.color}</td>
-<td class="text-body-secondary">${flower.live}</td>
-<td class="text-body-secondary">${flower.red_book}</td>
-`;
-            tbody.appendChild(tr);
-        });
+    // Функция для отправки данных на сервер
+    function sendDataToServer(flowerData) {
+        let request = new XMLHttpRequest();
+        request.open("POST", "/flowers", true);
+        request.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+
+        request.onload = function() {
+            if (request.status === 200) {
+                console.log("Данные успешно отправлены на сервер.");
+            } else {
+                console.error("Ошибка при отправке данных на сервер: " + request.statusText);
+            }
+        };
+
+        request.onerror = function() {
+            console.error("Ошибка при выполнении запроса.");
+        };
+
+        request.send(JSON.stringify(flowerData));
     }
+
+    // Вызываем функцию getAndSendFlowers при загрузке страницы
+    document.addEventListener('DOMContentLoaded', getAndSendFlowers);
 </script>
 
 <div class="container py-3">
@@ -134,7 +159,5 @@
         </div>
     </footer>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
